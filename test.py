@@ -15,15 +15,22 @@ img = cv2.imread('pièce.jpeg', 0) #image noir et blanc de la pièce
 length = len(img[1])
 height = len(img)
 
-print(img)
-cv2.imshow('pièce', img)
-cv2.waitKey(0) #on attend que l'utilisateur appuye sur une touche pour agir
-cv2.destroyAllWindows() #on ferme tout
+#print(img)
+#cv2.imshow('pièce', img)
+#cv2.waitKey(0) #on attend que l'utilisateur appuye sur une touche pour agir
+#cv2.destroyAllWindows() #on ferme tout
 
-Mat_grad = []
+Mat_grad_vert = np.zeros((height,length))
+Mat_grad_hor = np.zeros((height,length))
 
 for i in range (1, height):
     for j in range (1, length):
-        Mat_grad[i][j] = [grd.grad_hor(img,i,j),grd.grad_vert(img,i,j)]
+        #Mat_grad[i][j] = [grd.grad_hor(img,i,j) , grd.grad_vert(img,i,j)]
+        Mat_grad_vert[i][j] = grd.grad_vert(img,i,j)
+        Mat_grad_hor[i][j] = grd.grad_hor(img,i,j)
+        
+        print(grd.grad_hor(img,i,j))        
+        
+print(Mat_grad_vert)
+print(Mat_grad_hor)
 
-#print(Mat_grad)
