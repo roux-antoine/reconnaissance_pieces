@@ -10,6 +10,7 @@ import numpy as np
 
 import gradient as grd
 import floutage as flt
+import circle_finder as cf
 
 
 """Variables globales"""
@@ -95,3 +96,8 @@ for i in range (1,height-1):
 cv2.imshow('pièce', mat_cont)
 cv2.waitKey(0) #on attend que l'utilisateur appuye sur une touche pour agir
 cv2.destroyAllWindows() #on ferme tout
+
+mat_centre = cf.circle_finder(mat_cont)
+print(mat_centre)
+MAX = cf.max(mat_centre)
+print(MAX)
