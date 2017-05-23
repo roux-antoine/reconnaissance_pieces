@@ -10,11 +10,13 @@ import numpy as np
 
 import gradient as grd
 import floutage as flt
+import hough_circle_finder as hcf
 
 
 """Variables globales"""
 img = cv2.imread('pièce.jpeg', 0) #image noir et blanc de la pièce
 img = flt.blur_image(img,13)
+
 
 mat_grad = grd.mat_grad(img)
 
@@ -24,7 +26,7 @@ length = len(img[1])
 height = len(img)
 
 """seuils et valeurs de couleurs"""
-seuil_bas = 330
+seuil_bas = 300 #330
 seuil_haut = 350
 black = 0
 grey = 150
@@ -68,6 +70,7 @@ for i in range (1,height-1):
     for j in range (1,length-1):
         if (mat_cont[i,j] == grey):
             mat_cont[i,j] = white
+            
 
 """Affinage du trait"""
 print("Affinage du trait")
@@ -91,7 +94,10 @@ for i in range (1,height-1):
             if (mat_grad[i+1,j+1]>mat_grad[i,j] or mat_grad[i-1,j-1]>mat_grad[i,j]):
                 mat_cont[i,j] = 255
 
+print("fini")
 
 cv2.imshow('pièce', mat_cont)
 cv2.waitKey(0) #on attend que l'utilisateur appuye sur une touche pour agir
 cv2.destroyAllWindows() #on ferme tout
+
+
