@@ -104,11 +104,9 @@ cv2.imshow('pièce', mat_cont)
 cv2.waitKey(0) #on attend que l'utilisateur appuye sur une touche pour agir
 cv2.destroyAllWindows() #on ferme tout
 
-<<<<<<< HEAD
+
 mat_centre = cf.circle_finder(mat_cont)
 print(mat_centre)
 MAX = cf.max(mat_centre)
 print(MAX)
-=======
 
->>>>>>> fc9ad07d337e862efed8f7097fd8b2abebfed25e
