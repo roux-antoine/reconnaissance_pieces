@@ -30,4 +30,4 @@ def mat_grad(img):
     for i in range(1,len(img)):
         for j in range(1,len(img[1])):
             mat_grad[i,j] = force_grad(img,i,j)
-    print(mat_grad)
+    return(mat_grad)

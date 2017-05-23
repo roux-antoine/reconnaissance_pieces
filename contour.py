@@ -34,6 +34,7 @@ mat_cont = np.zeros((height,length))
 
 
 """Détermination de la matrice des contours""" 
+print("Détermination de la matrice des contours")
 
 for i in range (1, height):
     for j in range (1, length):
@@ -46,6 +47,7 @@ for i in range (1, height):
 
 
 """Affinage des pixels grisées"""
+print("Affinage des pixels grisés")
 compteur = 1
 still_grey = 1
 while(still_grey==1 and compteur<100):
@@ -68,10 +70,12 @@ for i in range (1,height-1):
             mat_cont[i,j] = white
 
 """Affinage du trait"""
+print("Affinage du trait")
 for i in range (1,height-1):
     for j in range (1,length-1):
         
         if (-22,5<=grd.angle_grad(img,i,j) and grd.angle_grad(img,i,j)<=22,5):
+            
             if (mat_grad[i,j+1]>mat_grad[i,j] or mat_grad[i,j-1]>mat_grad[i,j]):
                 mat_cont[i,j] = 255
                 
