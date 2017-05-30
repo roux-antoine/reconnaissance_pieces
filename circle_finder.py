@@ -6,14 +6,15 @@ Created on Tue May 23 15:36:08 2017
 """
 import numpy as np
 
+pas_du_rayon = 5
 
 def circle_finder(mat_cont):
     length = len(mat_cont[1])
     height = len(mat_cont)
-    mat_centre = np.zeros((3,height,length))
+    mat_centre = np.zeros((pas_du_rayon,height,length))
     
-    for r in range (0,3):    
-        R = 100 + 10*r
+    for r in range (0,pas_du_rayon):    
+        R = 40 + 10*r #Valeur incrémental du rayon, à modifier celon l'image à traiter (/!\ penser à modifier contour.py aussi)
         
         for i in range (0,height):
             for j in range (0,length):
@@ -33,14 +34,22 @@ def circle_finder(mat_cont):
 def max(matrice):
     dim = len(matrice)
     
-    max_val = 0
-    indices = np.zeros(dim)
+    
+    indices1 = np.zeros(dim)
+#    indices2 = np.zeros(dim)
+#    indices3 = np.zeros(dim)
+    
+    max1 = 0
+
     
     for d in range (0,dim):
         for i in range (0,len(matrice[d])):
             for j in range (0, len(matrice[d][i])):
-                if(matrice[d,i,j]>max_val):
-                    max_val = matrice[d,i,j]
-                    indices = [d,i,j]
-    return indices
-        
+                if(matrice[d,i,j]>max1):
+#                    indices3=indices2
+#                    indices2=indices1
+                    
+                    max1 = matrice[d,i,j]
+                    indices1 = [d,i,j]
+#    return [indices1,indices2,indices3]
+    return indices1        

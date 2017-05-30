@@ -10,12 +10,8 @@ import numpy as np
 
 import gradient as grd
 import floutage as flt
-<<<<<<< HEAD
-import circle_finder as cf
-=======
-import hough_circle_finder as hcf
->>>>>>> fc9ad07d337e862efed8f7097fd8b2abebfed25e
 
+import circle_finder as cf
 
 """Variables globales"""
 img = cv2.imread('pièce.jpeg', 0) #image noir et blanc de la pièce
@@ -107,6 +103,31 @@ cv2.destroyAllWindows() #on ferme tout
 
 mat_centre = cf.circle_finder(mat_cont)
 print(mat_centre)
-MAX = cf.max(mat_centre)
-print(MAX)
 
+max1 = cf.max(mat_centre)
+mat_centre[max1[0], max1[1]-20:max1[1]+20, max1[2]-20:max1[2]+20] = 0
+
+max2 = cf.max(mat_centre)
+mat_centre[max2[0], max2[1]-20:max2[1]+20, max2[2]-20:max2[2]+20] = 0
+
+max3 = cf.max(mat_centre)
+mat_centre[max3[0], max3[1]-20:max3[1]+20, max3[2]-20:max3[2]+20] = 0
+
+MAXS=[max1,max2,max3]
+print(MAXS)
+
+
+if (MAXS[0][0]>=MAXS[1][0] and MAXS[0][0]>=MAXS[2][0]):
+    MAX = MAXS[0]
+elif (MAXS[1][0]>=MAXS[0][0] and MAXS[1][0]>=MAXS[2][0]):
+    MAX = MAXS[1]
+else:
+    MAX = MAXS[2]
+
+
+
+cv2.circle(mat_cont, (MAX[1], MAX[2]), 40 + 10*MAX[0],(0,0,255))
+
+cv2.imshow('pièce', mat_cont)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
