@@ -10,11 +10,8 @@ import numpy as np
 
 import gradient as grd
 import floutage as flt
-<<<<<<< HEAD
 import circle_finder as cf
-=======
-import hough_circle_finder as hcf
->>>>>>> fc9ad07d337e862efed8f7097fd8b2abebfed25e
+
 
 
 """Variables globales"""
