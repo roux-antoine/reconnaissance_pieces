@@ -6,7 +6,7 @@ Created on Tue May 23 15:36:08 2017
 """
 import numpy as np
 
-pas_du_rayon = 5
+pas_du_rayon = 10
 
 def circle_finder(mat_cont):
     length = len(mat_cont[1])
@@ -14,7 +14,7 @@ def circle_finder(mat_cont):
     mat_centre = np.zeros((pas_du_rayon,height,length))
     
     for r in range (0,pas_du_rayon):    
-        R = 40 + 10*r #Valeur incrémental du rayon, à modifier celon l'image à traiter (/!\ penser à modifier contour.py aussi)
+        R = 20 + 5*r #Valeur incrémental du rayon, à modifier celon l'image à traiter (/!\ penser à modifier contour.py aussi)
         
         for i in range (0,height):
             for j in range (0,length):

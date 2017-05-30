@@ -10,15 +10,21 @@ import numpy as np
 
 import gradient as grd
 import floutage as flt
+import image_resizer as ir
 
 import circle_finder as cf
 
 """Variables globales"""
-img = cv2.imread('pièce.jpeg', 0) #image noir et blanc de la pièce
+img = cv2.imread('photo1new.JPG', 0) #image noir et blanc de la pièce
+img = ir.image_resizer(img,0.1)
 img = flt.blur_image(img,13)
 
 
-mat_grad = grd.mat_grad(img)
+cv2.imshow('pièce', img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+mat_grad = grd.force_grad(img)
 
 
 """Dimension de l'image"""
@@ -26,23 +32,23 @@ length = len(img[1])
 height = len(img)
 
 """seuils et valeurs de couleurs"""
-seuil_bas = 300 #330
-seuil_haut = 350
+seuil_bas = 100 #330
+seuil_haut = 150
 black = 0
 grey = 150
 white = 255
 
 mat_cont = np.zeros((height,length))
-
+#mat_force_grad = grd.force_grad(img)
 
 """Détermination de la matrice des contours""" 
 print("Détermination de la matrice des contours")
 
 for i in range (1, height):
     for j in range (1, length):
-        if (grd.force_grad(img,i,j)<seuil_bas):
+        if (mat_grad[i,j]<seuil_bas):
             mat_cont [i,j] = white
-        elif (grd.force_grad(img,i,j)>seuil_haut):
+        elif (mat_grad[i,j]>seuil_haut):
             mat_cont [i,j] = black
         else :
             mat_cont [i,j] = grey
@@ -70,7 +76,10 @@ for i in range (1,height-1):
     for j in range (1,length-1):
         if (mat_cont[i,j] == grey):
             mat_cont[i,j] = white
-            
+
+cv2.imshow('pièce', mat_cont)
+cv2.waitKey(0)
+cv2.destroyAllWindows()            
 
 """Affinage du trait"""
 print("Affinage du trait")
@@ -86,7 +95,7 @@ for i in range (1,height-1):
             if (mat_grad[i-1,j+1]>mat_grad[i,j] or mat_grad[i+1,j-1]>mat_grad[i,j]):
                 mat_cont[i,j] = 255
                 
-        if (grd.angle_grad(img,i,j)<=-67,5 or 67,5<=grd.force_grad(img,i,j)):
+        if (grd.angle_grad(img,i,j)<=-67,5 or 67,5<=grd.angle_grad(img,i,j)):
             if (mat_grad[i-1,j]>mat_grad[i,j] or mat_grad[i+1,j]>mat_grad[i,j]):
                 mat_cont[i,j] = 255
                 
@@ -126,7 +135,7 @@ else:
 
 
 
-cv2.circle(mat_cont, (MAX[1], MAX[2]), 40 + 10*MAX[0],(0,0,255))
+cv2.circle(mat_cont, (MAX[1], MAX[2]), 20 + 20*MAX[0],(0,0,255))
 
 cv2.imshow('pièce', mat_cont)
 cv2.waitKey(0)
