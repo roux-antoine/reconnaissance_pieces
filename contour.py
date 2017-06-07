@@ -15,21 +15,22 @@ import image_resizer as ir
 import circle_finder as cf
 
 """Variables globales"""
-img = cv2.imread('photo1new.JPG', 0) #image noir et blanc de la pièce
-img = ir.image_resizer(img,0.1)
-img = flt.blur_image(img,13)
+img = cv2.imread('1_euro_double.JPG', 0) #image noir et blanc de la pièce
+img_resized = ir.image_resizer(img,0.1)
+img_blurred = flt.blur_image(img_resized,13)
 
 
-cv2.imshow('pièce', img)
+cv2.imshow('img_blurred', img_blurred)
 cv2.waitKey(0)
+
 cv2.destroyAllWindows()
 
-mat_grad = grd.force_grad(img)
+mat_grad = grd.force_grad(img_blurred)
 
 
 """Dimension de l'image"""
-length = len(img[1])
-height = len(img)
+length = len(img_blurred[1])
+height = len(img_blurred)
 
 """seuils et valeurs de couleurs"""
 seuil_bas = 100 #330
@@ -54,8 +55,8 @@ for i in range (1, height):
             mat_cont [i,j] = grey
 
 
-"""Affinage des pixels grisées"""
-print("Affinage des pixels grisés")
+"""Elimination des pixels grisées"""
+print("Elimination des pixels grisés")
 compteur = 1
 still_grey = 1
 while(still_grey==1 and compteur<100):
@@ -77,7 +78,7 @@ for i in range (1,height-1):
         if (mat_cont[i,j] == grey):
             mat_cont[i,j] = white
 
-cv2.imshow('pièce', mat_cont)
+cv2.imshow('mat_cont', mat_cont)
 cv2.waitKey(0)
 cv2.destroyAllWindows()            
 
@@ -103,40 +104,32 @@ for i in range (1,height-1):
             if (mat_grad[i+1,j+1]>mat_grad[i,j] or mat_grad[i-1,j-1]>mat_grad[i,j]):
                 mat_cont[i,j] = 255
 
-print("fini")
-
-cv2.imshow('pièce', mat_cont)
+cv2.imshow('mat_cont', mat_cont)
 cv2.waitKey(0) #on attend que l'utilisateur appuye sur une touche pour agir
 cv2.destroyAllWindows() #on ferme tout
 
 
-mat_centre = cf.circle_finder(mat_cont)
-print(mat_centre)
-
-max1 = cf.max(mat_centre)
-mat_centre[max1[0], max1[1]-20:max1[1]+20, max1[2]-20:max1[2]+20] = 0
-
-max2 = cf.max(mat_centre)
-mat_centre[max2[0], max2[1]-20:max2[1]+20, max2[2]-20:max2[2]+20] = 0
-
-max3 = cf.max(mat_centre)
-mat_centre[max3[0], max3[1]-20:max3[1]+20, max3[2]-20:max3[2]+20] = 0
-
-MAXS=[max1,max2,max3]
-print(MAXS)
+"""Recherche des cercle"""
+print("Recherche des cercle")
+number_of_circles_to_find = 2
+final_circles = cf.circle_finder(mat_cont, number_of_circles_to_find)
 
 
-if (MAXS[0][0]>=MAXS[1][0] and MAXS[0][0]>=MAXS[2][0]):
-    MAX = MAXS[0]
-elif (MAXS[1][0]>=MAXS[0][0] and MAXS[1][0]>=MAXS[2][0]):
-    MAX = MAXS[1]
-else:
-    MAX = MAXS[2]
+for k in range (number_of_circles_to_find) :
+    x_center = int(final_circles[0, k])
+    y_center = int(final_circles[1, k])
+    radius = int(final_circles[2, k])
 
+    cv2.circle(img_resized, (x_center, y_center), radius, (255,0,0))  
 
-
-cv2.circle(mat_cont, (MAX[1], MAX[2]), 20 + 20*MAX[0],(0,0,255))
-
-cv2.imshow('pièce', mat_cont)
+                         
+cv2.imshow('img_resized with coins', img_resized)
 cv2.waitKey(0)
-cv2.destroyAllWindows()
+cv2.destroyAllWindows()  
+
+
+
+
+
+
+   
