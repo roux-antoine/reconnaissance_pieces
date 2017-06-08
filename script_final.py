@@ -21,7 +21,7 @@ black = 0
 grey = 150
 white = 255
 
-images_names = ["unknown_0.JPG"]
+images_names = ["unknown_0.JPG", "unknown_1.JPG", "unknown_2.JPG"]
 #images_names = ["unknown_0.JPG", "unknown_1","unknown_2", "unknown_3","unknown_4"]
 number_of_coins_to_identify = len(images_names)
 
@@ -29,10 +29,8 @@ number_of_coins_to_identify = len(images_names)
 
 """ Phase d'apprentissage : on apprend à reconnaitre les différentes pièces en fonction de leurs diamètres relatifs """
 
-img = cv2.imread('4_coins_moi.JPG', 0) #image noir et blanc de la pièce
-img_resized = ir.image_resizer(img,0.1)
-#img = cv2.imread('1_euro_double.JPG', 0) #image noir et blanc de la pièce
-#img_resized = ir.image_resizer(img,0.1)
+img = cv2.imread('3_coins.JPG', 0) #image noir et blanc de la pièce
+img_resized = ir.image_resizer(img,0.2)
 img_blurred = flt.blur_image(img_resized,13)
 
 #on créé la matrice du gradient
@@ -57,7 +55,7 @@ for i in range (1, height):
 
 
 #Elimination des pixels grisés
-print("Elimination des pixels grisés")     
+print("Elimination des pixels gris")     
 mat_cont = gpe.grey_pixel_eliminator(mat_cont, white, grey, black)
    
 
@@ -66,13 +64,14 @@ print("Affinage du trait")
 mat_cont = lwr.line_width_reducer(mat_grad, mat_cont, img)
 
 cv2.imshow('mat_cont', mat_cont)
+cv2.imwrite('FINAL_mat_cont.png', mat_cont)
 cv2.waitKey(0)
 cv2.destroyAllWindows()  
     
 
 #Recherche des cercle
 print("Recherche des cercles")
-number_of_circles_to_find = 4
+number_of_circles_to_find = 3
 final_circles = cf.circle_finder(mat_cont, number_of_circles_to_find)
 
 #on les trie par ordre decroisant de TAILLE   
@@ -90,8 +89,7 @@ for k in range (number_of_circles_to_find) :
     final_circles[2, indice_of_max_so_far] = 0 #sert a enlver le max de la liste
     
         
-#list_of_labels = ["2 euros", "50 cents", "1 euro", "20 cents", "10 cents"]
-list_of_labels = ["50 cents", "1 euro", "20 cents", "10 cents"]
+list_of_labels = ["50 cents", "1 euro", "10 cents"]
 
 for k in range (number_of_circles_to_find) :
     x_center = int(sorted_x[k])
@@ -103,7 +101,7 @@ for k in range (number_of_circles_to_find) :
 
                        
 cv2.imshow('img_resized with coins', img_resized)
-cv2.imwrite('Resultat_apprentissage_11.png', img_resized)
+cv2.imwrite('FINAL_resultat_apprentissage.png', img_resized)
 cv2.waitKey(0)
 cv2.destroyAllWindows()  
 
@@ -113,7 +111,7 @@ cv2.destroyAllWindows()
 
 for k in range (number_of_coins_to_identify) :
     img = cv2.imread(images_names[k], 0) #image noir et blanc de la pièce inconnue
-    img_resized = ir.image_resizer(img,0.1)
+    img_resized = ir.image_resizer(img,0.2)
     img_blurred = flt.blur_image(img_resized,13)
     
     #on créé la matrice du gradient
@@ -158,11 +156,13 @@ for k in range (number_of_coins_to_identify) :
     for k in range (len(list_of_labels)) : 
         radius_differences[k] = (radius - sorted_radius[k])**2
         
-    label_of_coin = list_of_labels[np.argmin(radius_differences)]
+    label_of_coin = list_of_labels[np.argmin(radius_differences)-1]
     
     cv2.circle(img_resized, (x_center, y_center), radius, (255,0,0))
     cv2.putText(img_resized, label_of_coin, (x_center, y_center), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,0,0))                 
+   
     cv2.imshow('identified coin', img_resized)
+    cv2.imwrite('FINAL_10_cents_identified.png', img_resized)
     cv2.waitKey(0)
     cv2.destroyAllWindows()  
     

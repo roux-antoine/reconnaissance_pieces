@@ -5,12 +5,13 @@ Created on Tue May 23 15:36:08 2017
 @author: boetto
 """
 import numpy as np
+import cv2
 
 
 
-start_radius = 30
+start_radius = 20
 step_radius = 3
-number_of_radius_tested = 20
+number_of_radius_tested = 10
 
 def circle_finder(mat_cont, number_of_circles_to_find):
     """ fonction qui trouve le cercle en testant différents rayons possibles
@@ -46,7 +47,12 @@ def circle_finder(mat_cont, number_of_circles_to_find):
     for k in range (0, number_of_radius_tested) :
         #dans cette boucle, on stocke les valeur des centres pour chaque rayon testé
         
-        for i in range (number_of_circles_to_find) :        
+        for i in range (number_of_circles_to_find) :     
+#            
+#            cv2.imshow('mat_centre', mat_centre[k,:,:])
+#            cv2.waitKey(0)
+#            cv2.destroyAllWindows()  
+#    
         
             indiceMax_so_far = np.argmax(mat_centre[k])
             max_value_so_far = np.max(mat_centre[k])
@@ -59,7 +65,8 @@ def circle_finder(mat_cont, number_of_circles_to_find):
             vect_of_centers[2,k,i] = max_value_so_far
             
             #on enleve maintenant le max qu'on vient de traiter
-            mat_centre[k, x_max-20:x_max+20, y_max-20:y_max+20] = 0
+            current_radius = start_radius + step_radius * k
+            mat_centre[k, x_max-current_radius:x_max+current_radius, y_max-current_radius:y_max+current_radius] = 0
     
     final_circles = np.zeros((3, number_of_circles_to_find))
     
