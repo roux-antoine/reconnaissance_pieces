@@ -12,6 +12,8 @@ import gradient as grd
 import floutage as flt
 import image_resizer as ir
 import circle_finder as cf
+import grey_pixel_eliminator as gpe
+import line_width_reducer as lwr
 
 seuil_bas = 100   #seuils et valeurs de couleurs
 seuil_haut = 150
@@ -51,48 +53,13 @@ for i in range (1, height):
 
 
 #Elimination des pixels grisés
-print("Elimination des pixels grisés")
-compteur = 1
-still_grey = 1
-while(still_grey==1 and compteur<100):
-    still_grey = 0
-    for i in range (1,height-1): 
-        for j in range (1,length-1):
-            if (mat_cont[i,j] == grey): #on analyse toutes les pixels grises
-                if (mat_cont[i+1,j]==black or mat_cont[i-1,j] == black or mat_cont[i,j+1]==black or mat_cont[i,j-1]==black): #s'il y a une pixel noir voisine alors la pixel grise devient noir
-                    mat_cont[i,j] = black
-                elif (mat_cont[i+1,j]==grey or mat_cont[i-1,j] == grey or mat_cont[i,j+1]==grey or mat_cont[i,j-1]==grey):
-                    still_grey = 1; #on ne peut rien dire pour cett pixel donc on la laisse grise et on maintient still_grey à 1 pour affiner l'image une nouvelle fois
-                else :
-                    mat_cont[i,j]=white
-    compteur += 1
-
-for i in range (1,height-1):
-    for j in range (1,length-1):
-        if (mat_cont[i,j] == grey):
-            mat_cont[i,j] = white           
+print("Elimination des pixels grisés")     
+mat_cont = gpe.grey_pixel_eliminator(mat_cont, white, grey, black)
+   
 
 #Affinage du trait
 print("Affinage du trait")
-for i in range (1,height-1):
-    for j in range (1,length-1):
-        
-        if (-22,5<=grd.angle_grad(img,i,j) and grd.angle_grad(img,i,j)<=22,5):
-            
-            if (mat_grad[i,j+1]>mat_grad[i,j] or mat_grad[i,j-1]>mat_grad[i,j]):
-                mat_cont[i,j] = 255
-                
-        if (22,5<grd.angle_grad(img,i,j) and grd.angle_grad(img,i,j)<67,5 ):
-            if (mat_grad[i-1,j+1]>mat_grad[i,j] or mat_grad[i+1,j-1]>mat_grad[i,j]):
-                mat_cont[i,j] = 255
-                
-        if (grd.angle_grad(img,i,j)<=-67,5 or 67,5<=grd.angle_grad(img,i,j)):
-            if (mat_grad[i-1,j]>mat_grad[i,j] or mat_grad[i+1,j]>mat_grad[i,j]):
-                mat_cont[i,j] = 255
-                
-        if (-67,5<grd.angle_grad(img,i,j) and grd.angle_grad(img,i,j)<-22,5 ):
-            if (mat_grad[i+1,j+1]>mat_grad[i,j] or mat_grad[i-1,j-1]>mat_grad[i,j]):
-                mat_cont[i,j] = 255
+mat_cont = lwr.line_width_reducer(mat_grad, mat_cont, img)
 
 #Recherche des cercle
 print("Recherche des cercles")
@@ -131,7 +98,7 @@ cv2.destroyAllWindows()
 
 
 
-""" maintenant on reconnait des pieces """
+""" Maintenant on reconnait des pieces """
 
 
 
