@@ -9,8 +9,9 @@ Created on Tue May 16 13:41:14 2017
 
 import cv2
 
+"""fonction qui prend en arg une image et la renvoie floutee"""
 def blur_image(img,kernel_size) : 
-    """fonction qui prend en arg une image et la renvoie floutee"""
+    
 
     #kernel_size = 7
     #ATTENTION : kernel_size doit etre un nbr impair 

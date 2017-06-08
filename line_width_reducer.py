@@ -17,7 +17,7 @@ def line_width_reducer (mat_grad, mat_cont, img) :
     
     for i in range (1,height-1):
         for j in range (1,length-1):
-            
+            """on effectue des disjoncions de cas selon l'angle du gradient pour savoir quelles pixels noir conserver"""
             if (-22,5<=grd.angle_grad(img,i,j) and grd.angle_grad(img,i,j)<=22,5):
                 
                 if (mat_grad[i,j+1]>mat_grad[i,j] or mat_grad[i,j-1]>mat_grad[i,j]):

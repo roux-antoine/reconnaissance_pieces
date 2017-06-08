@@ -4,9 +4,12 @@ Created on Tue May 30 14:37:47 2017
 
 @author: aroux
 """
-import cv2
 
+import cv2
+"""Adaptation de la resolution"""
 def image_resizer(img, scale) :
+    """prend en argument l'image et un facteur de reduction"""        
+            
     
     size_x = img.shape[0]
     size_y = img.shape[1]
