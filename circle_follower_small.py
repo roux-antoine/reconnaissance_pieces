@@ -72,18 +72,17 @@ def new_position_finder (old_img, new_img, x_center, y_center, radius) :
 #    for i in range (deplacement_x, 2*radius_small+1 + deplacement_x) :
 #        for k in range (deplacement_y, 2*radius_small+1 + deplacement_y):
 #            new_circle_square[i,k] = new_img_small[y_center_small-radius_small+i, x_center_small-radius_small+k]
-                    
-            
+#                    
+           
         
+    cv2.imshow('pièce', old_circle_square)
+    cv2.waitKey(0) #on attend que l'utilisateur appuye sur une touche pour agir
+    cv2.destroyAllWindows() #on ferme tout
     
-#    cv2.imshow('pièce', old_circle_square)
-#    cv2.waitKey(0) #on attend que l'utilisateur appuye sur une touche pour agir
-#    cv2.destroyAllWindows() #on ferme tout
-    
 
 
 
-test = 1
+test = 4
 
 if test == 1 : 
 
@@ -128,6 +127,6 @@ if test == 3 :
     new_position_finder(img1, img2, 1, 1, 1)
 
 if test == 4 : 
-    img1 = cv2.imread('photo1.JPG', 0) #image noir et blanc de la pièce
-    img2 = cv2.imread('photo2.JPG', 0) #image noir et blanc de la pièce
+    img1 = cv2.imread('1_euro_avant.JPG', 0) #image noir et blanc de la pièce
+    img2 = cv2.imread('1_euro_apres.JPG', 0) #image noir et blanc de la pièce
     new_position_finder(img1, img2, 1500, 2000, 30)
